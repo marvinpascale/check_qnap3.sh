@@ -623,7 +623,13 @@ elif [ "$strpart" == "volstatus" ]; then
 	VOLCAPACITYF=$(echo "scale=0; $VOLCAPACITY*$factor" | bc -l)
 	VOLFREESIZEF=$(echo "scale=0; $VOLFREESIZE*$factor2" | bc -l)
 
-        VOLPCT=`echo "($VOLFREESIZEF*100)/$VOLCAPACITYF" | bc`
+        if [ "$UNITtest" == "TB"  ]; then
+         VOLPCT=`echo "($VOLFREESIZEF)/$VOLCAPACITYF" | bc`
+        elif [ "$UNITtest" == "GB" ]; then
+         VOLPCT=`echo "($VOLFREESIZEF*100)/$VOLCAPACITYF" | bc`
+	else
+	 VOLPCT=`echo "($VOLFREESIZEF*10)/$VOLCAPACITYF" | bc`
+        fi
 
         if [ "$VOLPCT" -le "$strCritical" ]; then
                 VOLPCT="CRITICAL: $VOLPCT"
